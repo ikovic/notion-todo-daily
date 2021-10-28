@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ikovic/notion-todo-daily/internal/notion"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +16,19 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("ntd run, args: %v\n", args)
 	},
+}
+
+var searchCmd = &cobra.Command{
+	Use:   "search",
+	Short: "Page search",
+	Long:  "Search the pages from your Notion workspace",
+	Run: func(cmd *cobra.Command, args []string) {
+		notion.SearchPages()
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(searchCmd)
 }
 
 func Execute() {
