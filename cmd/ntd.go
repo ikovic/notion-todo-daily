@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -23,7 +24,7 @@ var searchCmd = &cobra.Command{
 	Short: "Page search",
 	Long:  "Search the pages from your Notion workspace",
 	Run: func(cmd *cobra.Command, args []string) {
-		notion.SearchPages()
+		notion.SearchPages(cmd.Root().Context())
 	},
 }
 
@@ -31,8 +32,8 @@ func init() {
 	rootCmd.AddCommand(searchCmd)
 }
 
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+func Execute(ctx context.Context) {
+	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}

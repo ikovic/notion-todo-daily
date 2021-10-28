@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
 	"github.com/ikovic/notion-todo-daily/cmd"
+	"github.com/ikovic/notion-todo-daily/internal/ctx"
 	"github.com/joho/godotenv"
 )
 
@@ -15,7 +17,7 @@ func main() {
 		return
 	}
 
-	log.Println(os.Getenv("AUTH_TOKEN"))
+	ctx := context.WithValue(context.Background(), ctx.ContextKey("AUTH_TOKEN"), os.Getenv("AUTH_TOKEN"))
 
-	cmd.Execute()
+	cmd.Execute(ctx)
 }

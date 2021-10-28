@@ -1,24 +1,22 @@
 package notion
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/hashicorp/go-cleanhttp"
+	ntdCtx "github.com/ikovic/notion-todo-daily/internal/ctx"
 )
 
 var client = cleanhttp.DefaultPooledClient()
 
 const API_BASE_URL = "https://api.notion.com/v1"
 
-var AUTH_TOKEN = os.Getenv("AUTH_TOKEN")
-
-func SearchPages() {
+func SearchPages(ctx context.Context) {
+	authToken := ctx.Value(ntdCtx.ContextKey("AUTH_TOKEN")).(string)
 	req, err := http.NewRequest("POST", API_BASE_URL+"/search", nil)
-
-	fmt.Println(AUTH_TOKEN)
 
 	if err != nil {
 		// handle error
@@ -26,7 +24,7 @@ func SearchPages() {
 		return
 	}
 
-	req.Header.Set("Authorization", "Bearer "+AUTH_TOKEN)
+	req.Header.Set("Authorization", "Bearer "+authToken)
 	req.Header.Set("Notion-Version", "2021-08-16")
 	resp, err := client.Do(req)
 
