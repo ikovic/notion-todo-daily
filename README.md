@@ -13,7 +13,7 @@ Now that we can fetch the blocks containing `to_do` objects, we should develop a
     - if yes, ignore it and continue
     - if not, copy it and set it as the root object
     - apply the algorithm the same way
-Expected output is an object tree that would only consist of unchecked `to_do` objects.
+Expected output is an object tree that would only consist of unchecked `to_do` objects. Each iteration could be run as a separate go routine, given that it would include an HTTP call to fetch the block data.
 ## Learning notes
 
 - What is the advantage of `context.Context` versus just importing packages that we need?
