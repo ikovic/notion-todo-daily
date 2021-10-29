@@ -41,6 +41,7 @@ type PageObject struct {
 	Id     string `json:"id"`
 }
 
+// https://developers.notion.com/reference/block
 type BlockObject struct {
 	Object      string `json:"object"`
 	Id          string `json:"id"`
