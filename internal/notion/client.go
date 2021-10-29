@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/hashicorp/go-cleanhttp"
@@ -35,7 +37,7 @@ func prepareHeaders(req *http.Request, authToken string) {
 	req.Header.Set("Content-Type", "application/json")
 }
 
-func GetQueryDatabaseRequest(ctx context.Context, dbId string, query *PageQuery) *http.Request {
+func QueryDatabase(ctx context.Context, dbId string, query *PageQuery) Response {
 	authToken := ctx.Value(ntdCtx.ContextKey("AUTH_TOKEN")).(string)
 
 	jsonBody, _ := json.Marshal(query)
@@ -44,5 +46,26 @@ func GetQueryDatabaseRequest(ctx context.Context, dbId string, query *PageQuery)
 	req, _ := http.NewRequest("POST", dbApiUrl, bytes.NewBuffer(jsonBody))
 	prepareHeaders(req, authToken)
 
-	return req
+	resp, err := NotionClient.Do(req)
+	if err != nil {
+		log.Panicf("Could not reach API %v\n", err)
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+
+	if err != nil {
+		log.Panicf("Could not read API response %v\n", err)
+	}
+
+	response := GetResponseDTO(body)
+
+	return response
+}
+
+func GetResponseDTO(body []byte) Response {
+	var response Response
+	json.Unmarshal(body, &response)
+	return response
 }
