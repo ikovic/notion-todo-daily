@@ -24,7 +24,8 @@ var searchCmd = &cobra.Command{
 	Short: "Page search",
 	Long:  "Search the pages from your Notion workspace",
 	Run: func(cmd *cobra.Command, args []string) {
-		notion.SearchPages(cmd.Root().Context())
+		lastPage := notion.GetLastPage(cmd.Root().Context())
+		fmt.Printf("Last created page ID: %s\n", lastPage.Id)
 	},
 }
 
