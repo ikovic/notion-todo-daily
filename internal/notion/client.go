@@ -59,12 +59,12 @@ func QueryDatabase(ctx context.Context, dbId string, query *PageQuery) Response 
 		log.Panicf("Could not read API response %v\n", err)
 	}
 
-	response := GetResponseDTO(body)
+	response := getResponseDTO(body)
 
 	return response
 }
 
-func GetResponseDTO(body []byte) Response {
+func getResponseDTO(body []byte) Response {
 	var response Response
 	json.Unmarshal(body, &response)
 	return response
