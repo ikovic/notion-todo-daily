@@ -29,8 +29,19 @@ var searchCmd = &cobra.Command{
 	},
 }
 
+var getBlocksCmd = &cobra.Command{
+	Use:   "blocks",
+	Short: "List blocks",
+	Long:  "List blocks from the given page",
+	Run: func(cmd *cobra.Command, args []string) {
+		blocks := notion.GetPageBlocks(cmd.Root().Context())
+		fmt.Printf("Blocks in the page: %v\n", blocks)
+	},
+}
+
 func init() {
 	rootCmd.AddCommand(searchCmd)
+	rootCmd.AddCommand(getBlocksCmd)
 }
 
 func Execute(ctx context.Context) {
